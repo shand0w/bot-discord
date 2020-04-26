@@ -1,6 +1,11 @@
 var Discord = require('discord.io');
 var logger = require('winston');
 var auth = require('./auth.json');
+var prefix = '!'
+const ytdl = require('ytdl-core');
+var song
+let sleep = require('util').promisify(setTimeout);
+var songInfo
 // Configure logger settings
 logger.remove(logger.transports.Console);
 logger.add(new logger.transports.Console, {
@@ -12,12 +17,14 @@ var bot = new Discord.Client({
    token: auth.token,
    autorun: true
 });
+
 bot.on('ready', function (evt) {
     logger.info('Connected');
     logger.info('Logged in as: ');
     logger.info(bot.username + ' - (' + bot.id + ')');
 });
-bot.on('message', function (user, userID, channelID, message, evt) {
+
+bot.on('message', async function (user, userID, channelID, message, evt) {
     // Our bot needs to know if it will execute a command
     // It will listen for messages that will start with `!`
     if (message.substring(0, 1) == '!') {
@@ -25,9 +32,59 @@ bot.on('message', function (user, userID, channelID, message, evt) {
         var cmd = args[0];
 		var arg = args[1];
 		var args2 = args[2];
-       
+		
         args = args.splice(1);
         switch(cmd) {
+			case 'stop' :
+				bot.sendMessage({
+				to: channelID,
+				message: "Nah, naaah.... :musical_note: :musical_note:"
+				});
+				await sleep(2500)
+				bot.sendMessage({
+				to: channelID,
+				message: "Huh?"
+				});
+				await sleep(2000)
+				bot.sendMessage({
+				to: channelID,
+				message: "Why did you stop the music?"
+				});
+				await sleep(2000)
+				bot.sendMessage({
+				to: channelID,
+				message: "Play music again, please. :pleading_face:"
+				});
+				await sleep(2000)
+				bot.sendMessage({
+				to: channelID,
+				message: "I will sing more quietly, but please, play music again. :pleading_face:"
+				});
+				break;
+			case 'skip' :
+				bot.sendMessage({
+				to: channelID,
+				message: "Why are you skipping this song? Don't you like it?"
+				});
+				break;
+			case 'join' :
+				bot.sendMessage({
+				to: channelID,
+				message: 'Wanna listen to music? Me too... but unfortunately I can not do it. :worried:'
+				});
+				break;
+			case 'p' :
+				bot.sendMessage({
+				to: channelID,
+				message: 'Happy listening to music!'
+				});
+				break;
+			case 'play' :
+				bot.sendMessage({
+				to: channelID,
+				message: 'Happy listening to music!'
+				});
+				break;
 			case 'mymood':
 				bot.sendMessage({
 				to: channelID,
@@ -81,18 +138,62 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 				default:
 					bot.sendMessage({
 					to: channelID,
-					message: ':musical_note::musical_note: What i am think of? :musical_note::musical_note:'
+					message: ':musical_note::musical_note: What i am think of now? :musical_note::musical_note:'
 					});
 					break;
 				}
 				break;
 			case 'character':
 				switch(arg) {
+					case 'Panika':
+						bot.sendMessage({
+						to: channelID,
+						message: 'Do not panic'
+						});
+						break;
+					case 'panika':
+						bot.sendMessage({
+						to: channelID,
+						message: 'Do not panic'
+						});
+						break;
 					case 'Shadow':
 						bot.sendMessage({
 						to: channelID,
 						message: 'I love him. :heart:'
 						});
+						break;
+					case 'sonadow':
+						switch(args2) {
+							case 'forever':
+								bot.sendMessage({
+								to: channelID,
+								message: 'Sonic and Shadow... Forever? Yaay! :smile:'
+								});
+								break;
+							default:
+								bot.sendMessage({
+								to: channelID,
+								message: 'Sonic and Shadow... Forever? Yaay! :smile:'
+								});
+								break;
+						}
+						break;
+					case 'Sonadow':
+						switch(args2) {
+							case 'Forever':
+								bot.sendMessage({
+								to: channelID,
+								message: 'Sonic and Shadow... Forever? Yaay! :smile:'
+								});
+								break;
+							default:
+								bot.sendMessage({
+								to: channelID,
+								message: 'Sonic and Shadow... Forever? Yaay! :smile:'
+								});
+								break;
+						}
 						break;
 					case 'shadow':
 						bot.sendMessage({
@@ -150,6 +251,30 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 						message: 'Strange guy...'
 						});
 						break;
+					case 'wiktorq1337':
+						bot.sendMessage({
+						to: channelID,
+						message: 'Nice man. :smile:'
+						});
+						break;
+					case 'Wiktorq1337':
+						bot.sendMessage({
+						to: channelID,
+						message: 'Nice man. :smile:'
+						});
+						break;
+					case 'wiktorq':
+						bot.sendMessage({
+						to: channelID,
+						message: 'Nice man. :smile:'
+						});
+						break;
+					case 'Wiktorq':
+						bot.sendMessage({
+						to: channelID,
+						message: 'Nice man. :smile:'
+						});
+						break;
 					case 'sonic.exe':
 						bot.sendMessage({
 						to: channelID,
@@ -168,6 +293,80 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 						message: 'One of the best and the cutest :yellow_heart: sidekick in the whole world. :yellow_heart:'
 						});
 						break;
+					case 'Ashley':
+						switch(args2) {
+							default:
+								bot.sendMessage({
+								to: channelID,
+								message: 'Another new friend? :smile:'
+								});
+								break;
+						}
+						break;
+					case 'Mj':
+						switch(args2) {
+							case 'hedgehog':
+								bot.sendMessage({
+								to: channelID,
+								message: 'Oh. New hedgehog.'
+								});
+								break;
+							default:
+								bot.sendMessage({
+								to: channelID,
+								message: 'Oh. New hedgehog.'
+								});
+								break;
+						}
+						break;
+					case 'mj':
+						switch(args2) {
+							case 'hedgehog':
+								bot.sendMessage({
+								to: channelID,
+								message: 'Oh. New hedgehog.'
+								});
+								break;
+							default:
+								bot.sendMessage({
+								to: channelID,
+								message: 'Oh. New hedgehog.'
+								});
+								break;
+						}
+						break;
+					case 'Leo':
+						switch(args2) {
+							case '_the_neo':
+								bot.sendMessage({
+								to: channelID,
+								message: 'Veeeeeery nice guy. Trust me.'
+								});
+								break;
+							default:
+								bot.sendMessage({
+								to: channelID,
+								message: 'Veeeeeery nice guy. Trust me.'
+								});
+								break;
+						}
+						break;
+					case 'leo':
+						switch(args2) {
+							case '_the_neo':
+								bot.sendMessage({
+								to: channelID,
+								message: 'Veeeeeery nice guy. Trust me.'
+								});
+								break;
+							default:
+								bot.sendMessage({
+								to: channelID,
+								message: 'Veeeeeery nice guy. Trust me.'
+								});
+								break;
+						}
+						break;
 					case 'Tails.exe':
 						bot.sendMessage({
 						to: channelID,
@@ -175,6 +374,12 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 						});
 						break;
 					case 'tails.exe':
+						bot.sendMessage({
+						to: channelID,
+						message: 'Veeeeeery nice guy. Trust me.'
+						});
+						break;
+					case 'UF!SANS':
 						bot.sendMessage({
 						to: channelID,
 						message: 'Veeeeeery nice guy. Trust me.'
@@ -294,6 +499,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 						message: 'He masterfully uses the magic of the elements (Ice, Fire, Lightning) as well as Arcane.'
 						});
 						break;
+					
 					case 'Sonic':
 						bot.sendMessage({
 						to: channelID,
@@ -309,13 +515,13 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 					case 'Szwejo':
 						bot.sendMessage({
 						to: channelID,
-						message: 'He? I am afraid I can not define him properly... :confused:'
+						message: 'He? He is nice and smart.'
 						});
 						break;
 					case 'szwejo':
 						bot.sendMessage({
 						to: channelID,
-						message: 'He? I am afraid I can not define him properly... :confused:'
+						message: 'He? He is nice and smart.'
 						});
 						break;
 					default:
